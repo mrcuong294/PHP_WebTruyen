@@ -1,0 +1,15 @@
+{
+  "name": "appbooklibs/booklibs",
+  "description": "Backend app book libs",
+  "minimum-stability": "dev",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "Nguyen Cuong",
+      "email": "vancuong2941989@gmail.com"
+    }
+  ],
+  "require": {
+    "google/apiclient": "2.x-dev"
+  }
+}

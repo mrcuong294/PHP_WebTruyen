@@ -26,3 +26,12 @@ function curl($url) {
     curl_close($ch);
     return $page;
 }
+
+function write_file_chapter($file_name, $content) {
+    $path = __DIR__ . '/files/chaps/' . $file_name . '.txt';
+    $fp = fopen($path, 'w');
+    if ($fp) {
+        fwrite($fp, $content);
+        fclose($fp);
+    }
+}

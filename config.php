@@ -6,7 +6,7 @@
  * Time: 8:19 PM
  */
 define('DB_HOST', 'localhost');
-define('DB_NAME', 'webtruyen_ss');
+define('DB_NAME', 'webtruyen_yy');
 define('DB_USER', 'root');
 define('DB_PASS', '');
 
