@@ -14,7 +14,8 @@ define('CLIENT_SECRET_PATH', __DIR__ . '/client_secret.json');
 // If modifying these scopes, delete your previously saved credentials
 // at ~/.credentials/drive-php-quickstart.json
 define('SCOPES', implode(' ', array(
-        Google_Service_Drive::DRIVE_METADATA_READONLY)
+        Google_Service_Drive::DRIVE_METADATA_READONLY,
+        Google_Service_Drive::DRIVE)
 ));
 
 if (php_sapi_name() != 'cli') {
@@ -80,7 +81,7 @@ function expandHomeDirectory($path) {
 $client = getClient();
 $service = new Google_Service_Drive($client);
 
-// Print the names and IDs for up to 10 files.
+// Print the names and IDs for up to$service = new Google_Service_Drive($client); 10 files.
 $optParams = array(
     'pageSize' => 10,
     'fields' => 'nextPageToken, files(id, name)'
