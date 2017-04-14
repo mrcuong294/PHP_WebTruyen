@@ -11,7 +11,8 @@ class DriveUtils {
     const APPLICATION_NAME = 'Book Libs Drive Api';
     const CREDENTIALS_PATH = '~/.credentials/drive-php-quickstart.json';
     const CLIENT_SECRET_PATH = __DIR__ . '/client_secret.json';
-    const FOLDER_ID = '0B-47U73VinI7anRRaU1qZlg4SVE';
+    const FOLDER_ID = '0B-47U73VinI7MVFHRmQwWUpUeW8';
+    const SUB_FOLDER_ID = '0B-47U73VinI7eUQ3OWVpYk4zUm8';
 
     // If modifying these scopes, delete your previously saved credentials
     // at ~/.credentials/drive-php-quickstart.json
@@ -19,16 +20,27 @@ class DriveUtils {
 
     private $service;
 
+    private $folderId;
+
     function __construct() {
         $this->client = $this->getClient();
         $this->service = new Google_Service_Drive($this->client);
     }
 
+    /**
+     * Update file chapter .txt to google drive;
+     * @param $fileName
+     * @param $fileContent
+     * @return mixed
+     */
     public function uploadChapterContent($fileName, $fileContent) {
+        if ($this->folderId == null) {
+            $this->folderId = $this::SUB_FOLDER_ID;
+        }
 
         $fileMetadata = new Google_Service_Drive_DriveFile(array(
             'name' => $fileName . '.txt',
-            'parents' => array($this::FOLDER_ID)
+            'parents' => array($this->folderId)
         ));
 
         $file = $this->service->files->create($fileMetadata, array(
@@ -36,7 +48,23 @@ class DriveUtils {
             'mimeType' => 'application/octet-stream',
             'uploadType' => 'multipart',
             'fields' => 'id'));
+
         return $file->id;
+    }
+
+    /**
+     * Create new folder in drive;
+     * @param $foldername
+     */
+    public function createFolder($foldername) {
+        $fileMetadata = new Google_Service_Drive_DriveFile(array(
+            'name' => $foldername,
+            'parents' => array($this::FOLDER_ID),
+            'mimeType' => 'application/vnd.google-apps.folder'));
+        $file = $this->service->files->create($fileMetadata, array(
+            'fields' => 'id'));
+
+        $this->folderId = $file->id;
     }
 
     /**

@@ -17,19 +17,25 @@ define('SECRET_KEY', 'knjg');
 try {
     $conn = getConnecDatabase();
     $query = $conn->prepare("SELECT id, id_book, number, source_link FROM wt_chapter 
-              WHERE source_link IS NOT NULL AND source_link<>'' AND content_trans IS NULL LIMIT 100000");
+              WHERE source_link IS NOT NULL AND source_link<>'' AND content_trans IS NULL");
     $query->execute();
 
     if($query->rowCount() > 0) {
         $driveUtil = new DriveUtils();
-
+        $bookId = -1;
         while($row = $query->fetch(PDO::FETCH_ASSOC)) {
 
             $file_name = $row['id_book'] . '_' . $row['number'] . '_' . $row['id'] .'_'. SECRET_KEY;
             $content = get_content_chap($row['source_link']);
 
             if ($content != null) {
-                // Updaload file to drive;
+                if ($bookId != $row['id_book']) {
+                    $bookId = $row['id_book'];
+                    // Create new folder chapter for book;
+                    $driveUtil->createFolder('book_'.$bookId);
+                }
+
+                // Updaload file to folder chapter on google drive;
                 $drive_file_id = $driveUtil->uploadChapterContent($file_name, $content);
                 if ($drive_file_id != null) {
                     // Update info to table chapter on DB;
